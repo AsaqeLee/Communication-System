@@ -1,81 +1,87 @@
-# 通信系统仿真平台
+# Communication System Simulations
 
-## 版权声明
+MATLAB simulations for basic digital communications, spread-spectrum links (DSSS, FHSS), OFDM, and interference-signal generation/analysis.
 
-版权所有 © 2025 Asaqe Lee。保留所有权利。
+## Overview
 
-本项目受版权法和其他知识产权法律法规的保护。
+This repository collects teaching and research scripts for end-to-end communication-system experiments. Top-level `Sys_*.m` entry points provide simplified runs; `src/` and `systems/` hold modular building blocks.
 
-### 使用限制
+## Scope
 
-1. 本项目仅供学术研究和教育目的使用。
-2. 严禁将本项目用于任何商业用途。
-3. 禁止用于营利性活动。
-4. 未经作者明确的书面许可，禁止：
-   - 复制、修改或分发本项目的代码
-   - 将本项目用于商业目的
-   - 将本项目整合到商业产品中
+- Basic communication system simulation
+- DSSS (direct-sequence spread spectrum)
+- FHSS (frequency-hopping spread spectrum)
+- OFDM
+- Interference generation and analysis (single-tone, comb, noise-modulated, multi-tone, partial-band, sweep)
 
-### 项目说明
+## Requirements
 
-本项目包含以下系统的仿真实现：
-- 基础通信系统
-- DSSS（直接序列扩频）系统
-- FHSS（跳频扩频）系统
-- OFDM（正交频分复用）系统
-- 各类干扰信号生成与分析
+- MATLAB
+- Signal Processing Toolbox
+- Communications Toolbox (recommended for modulation / channel helpers)
 
-### 目录结构
+## Getting started
 
-```
-├── src/                # 源代码
-│   ├── modulation/    # 调制解调
-│   ├── interference/  # 干扰信号
-│   └── utils/         # 工具函数
-├── systems/           # 系统实现
-│   ├── basic/        # 基础系统
-│   └── anti_jamming/ # 抗干扰系统
-├── test/             # 测试代码
-└── docs/             # 文档
+Clone the repository, open MATLAB at the project root, and run a top-level script, for example:
+
+```matlab
+run('Sys_OFDM_SimpleSimulation.m')
+run('Sys_DSSS_SimpleSimulation.m')
+run('Sys_FHSS_SimpleSimulation.m')
+run('Sys_SimpleSimulation.m')
 ```
 
-### 作者
+Add `src/` to the path if a script expects modular helpers:
 
-**Asaqe Lee** 
+```matlab
+addpath(genpath('src'));
+addpath(genpath('systems'));
+```
 
-### 联系方式
+## Project layout
 
-如有任何问题或需要授权，请联系作者。
+```text
+.
+├── Sys_SimpleSimulation.m
+├── Sys_OFDM_SimpleSimulation.m
+├── Sys_DSSS_SimpleSimulation.m
+├── Sys_FHSS_SimpleSimulation.m
+├── src/
+│   ├── modulation/
+│   ├── interference/
+│   └── utils/
+├── systems/
+│   ├── basic/
+│   └── anti_jamming/
+├── test/
+├── docs/
+└── RefCode/
+```
 
-### 免责声明
+## Interference dataset notes
 
-作者不对使用本项目造成的任何直接或间接损失负责。使用本项目即表示您同意遵守上述使用限制。
+When interference samples are exported as CSV, the documented conventions are:
 
-干扰信号数据集说明
+| Folder | Type |
+|--------|------|
+| `single_tone/` | Single-tone |
+| `comb/` | Comb spectrum |
+| `noise_mod/` | Noise-modulated |
+| `multi_tone/` | Multi-tone |
+| `partial_band/` | Partial-band noise |
+| `sweep/` | Frequency sweep |
 
-1. 数据集结构：
-   - single_tone/: 单音干扰
-   - comb/: 梳状谱干扰
-   - noise_mod/: 噪声调制干扰
-   - multi_tone/: 多音干扰
-   - partial_band/: 部分频带噪声干扰
-   - sweep/: 扫频干扰
+- Filename pattern: `sample_XXXX.csv`
+- First row: parameter metadata (type-specific; see original notes for field order)
+- Remaining rows: real and imaginary parts of the sample
+- Typical sampling: 1 MHz for 1 ms; about 1000 samples per class when a full set is generated
 
-2. 文件格式：
-   - 每个样本保存为单独的CSV文件
-   - 文件名格式：sample_XXXX.csv
-   - 第一行：参数信息
-   - 后续行：信号数据（实部和虚部）
+Confirm paths and whether datasets are committed or regenerated locally before assuming files exist on disk.
 
-3. 参数说明（第一行）：
-   - 单音干扰：[载波频率(Hz), 功率(W), 信噪比(dB)]
-   - 梳状谱干扰：[中心频率(Hz), 带宽(Hz), 功率(W), 信噪比(dB)]
-   - 噪声调制干扰：[载波频率(Hz), 调制带宽(Hz), 功率(W), 信噪比(dB)]
-   - 多音干扰：[音数量, 频率1, 频率2, 频率3, 频率4, 频率5, 功率(W), 信噪比(dB)]
-   - 部分频带噪声干扰：[中心频率(Hz), 带宽(Hz), 功率(W), 信噪比(dB)]
-   - 扫频干扰：[起始频率(Hz), 终止频率(Hz), 扫频周期(s), 功率(W), 信噪比(dB)]
+## Status / limitations
 
-4. 采样参数：
-   - 采样率：1 MHz
-   - 采样时间：1 ms
-   - 每类干扰样本数：1000
+Academic simulation code. There is no open-source LICENSE file in this repository. The author retains copyright; intended use is academic research and education. Commercial use requires explicit written permission. The author is not liable for damages arising from use of this code.
+
+## Author
+
+Asaqe Lee
